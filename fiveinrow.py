@@ -6,26 +6,26 @@ from pygame.locals import *
 
 version = 'FiveChessV1.0 '
 
-# 基础参数设置
-square_size = 40  # 单格的宽度（不是格数！是为了方便绘制棋盘用的变量
-chess_size = square_size // 2 - 2  # 棋子大小
-web_broad = 15  # 棋盘格数+1（nxn）
-map_w = web_broad * square_size  # 棋盘长度
-map_h = web_broad * square_size  # 棋盘高度
-info_w = 60  # 按钮界面宽度
-button_w = 120  # 按钮长宽
+
+square_size = 40  
+chess_size = square_size  
+web_broad = 15  
+map_w = web_broad * square_size  
+map_h = web_broad * square_size  
+info_w = 60  
+button_w = 120  
 button_h = 45
-screen_w = map_w  # 总窗口长宽
+screen_w = map_w  
 screen_h = map_h + info_w
 
 
 
 
-class MAP_ENUM(IntEnum):  # 用数字表示当前格的情况
-    be_empty = 0,  # 无人下
-    player1 = 1,  # 玩家一，执白
-    player2 = 2,  # 玩家二，执黑
-    out_of_range = 3,  # 出界
+class MAP_ENUM(IntEnum):
+    be_empty = 0,
+    player2 = 1,
+    player1 = 2,
+    out_of_range = 3,
 
 
 class Map:
@@ -47,7 +47,7 @@ class Map:
         else:
             return MAP_ENUM.player1
 
-    def getLocate(self, x, y):  # 输入下标，返回具体位置
+    def getLocate(self, x, y):  
         map_x = x * square_size
         map_y = y * square_size
         return map_x, map_y, square_size, square_size  # 返回位置信息
@@ -404,7 +404,8 @@ class Button:
         self.button_color = color
         self.text_color = (255, 255, 255)
         self.enable = enable
-        self.font = pygame.font.SysFont(None, button_h * 2 // 3)
+        #self.font = pygame.font.SysFont(None, button_h * 2 // 3-5)
+        self.font = pygame.font.Font("Deng.ttf", button_h * 2 // 3)
         self.rect = pygame.Rect(0, 0, self.width, self.height)
         self.rect.topleft = (x, y)
         self.text = text
@@ -458,6 +459,7 @@ class BlackStartButton(Button):
             game.winner = None
             game.multiple = False
             game.useAI = True
+
             self.msg_image = self.font.render(self.text, True, self.text_color, self.button_color[1])
             self.enable = False
             return True
@@ -516,10 +518,10 @@ class Game:
         pygame.display.set_caption(caption)
         self.clock = pygame.time.Clock()
         self.buttons = []
-        self.buttons.append(WhiteStartButton(self.screen, 'white', 20, map_h))
-        self.buttons.append(BlackStartButton(self.screen, 'black', 160, map_h))
-        self.buttons.append(GiveupButton(self.screen, 'surrender', 300, map_h))
-        self.buttons.append(MultiStartButton(self.screen, 'Multiplayer', 450, map_h))
+        self.buttons.append(WhiteStartButton(self.screen, '先手', 20, map_h))
+        self.buttons.append(BlackStartButton(self.screen, '后手', 160, map_h))
+        self.buttons.append(GiveupButton(self.screen, '认输', 300, map_h))
+        self.buttons.append(MultiStartButton(self.screen, '多人游戏', 450, map_h))
         self.is_play = False
         self.map = Map(web_broad, web_broad)
         self.player = MAP_ENUM.player1
@@ -593,7 +595,8 @@ class Game:
 
     def showWinner(self):
         def showFont(screen, text, location_x, locaiton_y, height):
-            font = pygame.font.SysFont(None, height)
+            font = pygame.font.Font('Deng.ttf', height)
+
             font_image = font.render(text, True, (255, 215, 0), (255, 255, 255))
             font_image_rect = font_image.get_rect()
             font_image_rect.x = location_x
@@ -601,9 +604,9 @@ class Game:
             screen.blit(font_image, font_image_rect)
 
         if self.winner == MAP_ENUM.player1:
-            str = 'White Wins!'
+            str = '白胜'
         else:
-            str = 'Black Wins!'
+            str = '黑胜'
         showFont(self.screen, str, map_w / 5, screen_h / 8, 100)
         pygame.mouse.set_visible(True)
 
